@@ -43,6 +43,23 @@ namespace Task_5
             {
                 Console.WriteLine(bfs.Next().GetType().Name);
             }
+
+            Console.WriteLine("\n--- STATE DEMO ---");
+
+            // Hidden
+            button.SetState(new HiddenState());
+            Console.WriteLine("Hidden button:");
+            Console.WriteLine(root.OuterHTML());
+
+            // Disabled
+            button.SetState(new DisabledState());
+            Console.WriteLine("\nDisabled button click:");
+            button.TriggerEvent("click");
+
+            // Back to normal
+            button.SetState(new VisibleState());
+            Console.WriteLine("\nVisible button:");
+            Console.WriteLine(root.OuterHTML());
         }
     }
 }

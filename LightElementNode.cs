@@ -7,6 +7,7 @@ namespace Task_5
         private string tagName;
         private string displayType;
         private string closingType;
+        private IElementState state = new VisibleState();
 
         private List<string> classes = new List<string>();
         private List<LightNode> children = new List<LightNode>();
@@ -15,8 +16,13 @@ namespace Task_5
             return children;
         }
 
-        private Dictionary<string, List<Action>> events =
-            new Dictionary<string, List<Action>>();
+        public void SetState(IElementState newState)
+        {
+            state = newState;
+        }
+
+        private Dictionary<string, List<ICommand>> events =
+        new Dictionary<string, List<ICommand>>();
 
         public LightElementNode(string tagName, string displayType, string closingType)
         {
@@ -40,23 +46,23 @@ namespace Task_5
             return children.Count;
         }
 
-        public void AddEventListener(string eventName, Action handler)
+        public void AddEventListener(string eventName, ICommand command)
         {
             if (!events.ContainsKey(eventName))
             {
-                events[eventName] = new List<Action>();
+                events[eventName] = new List<ICommand>();
             }
 
-            events[eventName].Add(handler);
+            events[eventName].Add(command);
         }
 
-        public void TriggerEvent(string eventName)
+        public void DefaultTriggerEvent(string eventName)
         {
             if (events.ContainsKey(eventName))
             {
-                foreach (var handler in events[eventName])
+                foreach (var command in events[eventName])
                 {
-                    handler();
+                    command.Execute();
                 }
             }
             else
@@ -65,12 +71,22 @@ namespace Task_5
             }
         }
 
+        public void TriggerEvent(string eventName)
+        {
+            state.HandleEvent(this, eventName);
+        }
+
         private string GetClasses()
         {
             if (classes.Count == 0)
                 return "";
 
             return " class=\"" + string.Join(" ", classes) + "\"";
+        }
+
+        public override string OuterHTML(int indent = 0)
+        {
+            return state.HandleRender(this, indent);
         }
 
         public override string InnerHTML()
@@ -85,7 +101,7 @@ namespace Task_5
             return sb.ToString();
         }
 
-        public override string OuterHTML(int indent = 0)
+        public string DefaultOuterHTML(int indent = 0)
         {
             string space = new string(' ', indent);
 
