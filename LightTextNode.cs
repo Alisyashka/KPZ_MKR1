@@ -18,5 +18,10 @@
         {
             return text;
         }
+
+        public override void Accept(ILightNodeVisitor visitor)
+        {
+            visitor.VisitText(this);
+        }
     }
 }

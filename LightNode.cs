@@ -4,5 +4,7 @@
     {
         public abstract string OuterHTML(int indent = 0);
         public abstract string InnerHTML();
+
+        public abstract void Accept(ILightNodeVisitor visitor);
     }
 }
