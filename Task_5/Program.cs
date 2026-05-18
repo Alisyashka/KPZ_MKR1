@@ -1,41 +1,39 @@
-﻿namespace Task_5
+﻿using Task_5.Task_5;
+
+namespace Task_5
 {
     internal class Program
     {
         static void Main()
         {
-            LightElementNode button =
-                new LightElementNode("button", "inline", "paired");
+            var root = new LightElementNode("div", "block", "paired");
 
-            button.AddClass("btn");
-            button.AddChild(new LightTextNode("Press me"));
+            var button = new LightElementNode("button", "inline", "paired");
+            button.AddChild(new LightTextNode("Click me"));
 
-            button.AddEventListener("click", () =>
+            var span = new LightElementNode("span", "inline", "paired");
+            span.AddChild(new LightTextNode("Hello"));
+
+            root.AddChild(button);
+            root.AddChild(span);
+
+            Console.WriteLine("=== DFS ===");
+            ILightIterator dfs = new DepthFirstIterator(root);
+
+            while (dfs.HasNext())
             {
-                Console.WriteLine("Button clicked!");
-            });
+                var node = dfs.Next();
+                Console.WriteLine(node.GetType().Name);
+            }
 
-            button.AddEventListener("click", () =>
+            Console.WriteLine("\n=== BFS ===");
+            ILightIterator bfs = new BreadthFirstIterator(root);
+
+            while (bfs.HasNext())
             {
-                Console.WriteLine("Second click handler!");
-            });
-
-            button.AddEventListener("mouseover", () =>
-            {
-                Console.WriteLine("Mouse over button!");
-            });
-
-            Console.WriteLine("HTML:");
-            Console.WriteLine(button.OuterHTML());
-
-            Console.WriteLine("\nTrigger click:");
-            button.TriggerEvent("click");
-
-            Console.WriteLine("\nTrigger mouseover:");
-            button.TriggerEvent("mouseover");
-
-            Console.WriteLine("\nTrigger keydown:");
-            button.TriggerEvent("keydown");
+                var node = bfs.Next();
+                Console.WriteLine(node.GetType().Name);
+            }
         }
     }
 }
