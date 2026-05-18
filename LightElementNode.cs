@@ -10,6 +10,10 @@ namespace Task_5
 
         private List<string> classes = new List<string>();
         private List<LightNode> children = new List<LightNode>();
+        public List<LightNode> GetChildren()
+        {
+            return children;
+        }
 
         private Dictionary<string, List<Action>> events =
             new Dictionary<string, List<Action>>();
