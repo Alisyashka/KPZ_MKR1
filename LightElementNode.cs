@@ -142,5 +142,14 @@ namespace Task_5
 
             return sb.ToString();
         }
+        public override void Accept(ILightNodeVisitor visitor)
+        {
+            visitor.VisitElement(this);
+
+            foreach (var child in children)
+            {
+                child.Accept(visitor);
+            }
+        }
     }
 }

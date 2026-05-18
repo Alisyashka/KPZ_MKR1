@@ -67,6 +67,20 @@ namespace Task_5
             root.SetRenderer(customRenderer);
 
             Console.WriteLine(root.RenderWithTemplate());
+
+            Console.WriteLine("\n--- VISITOR DEMO ---");
+
+            var counter = new CountVisitor();
+            root.Accept(counter);
+
+            Console.WriteLine($"Elements: {counter.ElementCount}");
+            Console.WriteLine($"Text nodes: {counter.TextCount}");
+
+            var textCollector = new TextCollectorVisitor();
+            root.Accept(textCollector);
+
+            Console.WriteLine("Collected text:");
+            Console.WriteLine(textCollector.Text);
         }
     }
 }
