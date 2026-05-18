@@ -60,6 +60,13 @@ namespace Task_5
             button.SetState(new VisibleState());
             Console.WriteLine("\nVisible button:");
             Console.WriteLine(root.OuterHTML());
+
+            Console.WriteLine("\n--- TEMPLATE METHOD DEMO ---");
+
+            var customRenderer = new StandardHtmlRenderer();
+            root.SetRenderer(customRenderer);
+
+            Console.WriteLine(root.RenderWithTemplate());
         }
     }
 }

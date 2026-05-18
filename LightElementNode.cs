@@ -4,9 +4,9 @@ namespace Task_5
 {
     public class LightElementNode : LightNode
     {
-        private string tagName;
+        public string TagName;
         private string displayType;
-        private string closingType;
+        public string ClosingType;
         private IElementState state = new VisibleState();
 
         private List<string> classes = new List<string>();
@@ -21,14 +21,22 @@ namespace Task_5
             state = newState;
         }
 
+        public string GetClasses()
+        {
+            if (classes.Count == 0)
+                return "";
+
+            return " class=\"" + string.Join(" ", classes) + "\"";
+        }
+
         private Dictionary<string, List<ICommand>> events =
         new Dictionary<string, List<ICommand>>();
 
         public LightElementNode(string tagName, string displayType, string closingType)
         {
-            this.tagName = tagName;
+            this.TagName = tagName;
             this.displayType = displayType;
-            this.closingType = closingType;
+            this.ClosingType = closingType;
         }
 
         public void AddClass(string className)
@@ -76,17 +84,21 @@ namespace Task_5
             state.HandleEvent(this, eventName);
         }
 
-        private string GetClasses()
-        {
-            if (classes.Count == 0)
-                return "";
+        private HtmlRenderer renderer = new StandardHtmlRenderer();
 
-            return " class=\"" + string.Join(" ", classes) + "\"";
+        public void SetRenderer(HtmlRenderer newRenderer)
+        {
+            renderer = newRenderer;
         }
 
         public override string OuterHTML(int indent = 0)
         {
             return state.HandleRender(this, indent);
+        }
+
+        public string RenderWithTemplate(int indent = 0)
+        {
+            return renderer.Render(this, indent);
         }
 
         public override string InnerHTML()
@@ -105,14 +117,14 @@ namespace Task_5
         {
             string space = new string(' ', indent);
 
-            if (closingType == "single")
+            if (ClosingType == "single")
             {
-                return space + "<" + tagName + GetClasses() + "/>";
+                return space + "<" + TagName + GetClasses() + "/>";
             }
 
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine(space + "<" + tagName + GetClasses() + ">");
+            sb.AppendLine(space + "<" + TagName + GetClasses() + ">");
 
             foreach (var child in children)
             {
@@ -126,7 +138,7 @@ namespace Task_5
                 }
             }
 
-            sb.Append(space + "</" + tagName + ">");
+            sb.Append(space + "</" + TagName + ">");
 
             return sb.ToString();
         }
