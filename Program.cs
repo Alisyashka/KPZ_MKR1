@@ -11,19 +11,29 @@ namespace Task_5
             var button = new LightElementNode("button", "inline", "paired");
             button.AddChild(new LightTextNode("Click me"));
 
+            // Command pattern
+            button.AddEventListener("click", new ClickCommand());
+            button.AddEventListener("click", new SecondClickCommand());
+
             var span = new LightElementNode("span", "inline", "paired");
             span.AddChild(new LightTextNode("Hello"));
 
             root.AddChild(button);
             root.AddChild(span);
 
-            Console.WriteLine("=== DFS ===");
+            Console.WriteLine("HTML:");
+            Console.WriteLine(root.OuterHTML());
+
+            Console.WriteLine("\nTrigger click:");
+            button.TriggerEvent("click");
+
+            // Iterator
+            Console.WriteLine("\n=== DFS ===");
             ILightIterator dfs = new DepthFirstIterator(root);
 
             while (dfs.HasNext())
             {
-                var node = dfs.Next();
-                Console.WriteLine(node.GetType().Name);
+                Console.WriteLine(dfs.Next().GetType().Name);
             }
 
             Console.WriteLine("\n=== BFS ===");
@@ -31,8 +41,7 @@ namespace Task_5
 
             while (bfs.HasNext())
             {
-                var node = bfs.Next();
-                Console.WriteLine(node.GetType().Name);
+                Console.WriteLine(bfs.Next().GetType().Name);
             }
         }
     }
